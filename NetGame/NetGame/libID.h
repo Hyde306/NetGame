@@ -1,0 +1,38 @@
+#pragma once
+
+//向き
+enum class DIR {
+	DOWN,
+	LEFT_DOWN,
+	LEFT,
+	LEFT_UP,
+	UP,
+	RIGHT_DOWN,
+	RIGHT,
+	RIGHT_UP
+};
+
+
+//ゲームパッド用(デフォルト)
+enum class libID{
+	BUTTON_UP,
+	BUTTON_DOWN,
+	BUTTON_LEFT,
+	BUTTON_RIGHT,
+	BUTTON_1,
+	BUTTON_2,
+	BUTTON_3,
+	BUTTON_4,
+	BUTTON_5,
+	BUTTON_6,
+	BUTTON_7,
+	BUTTON_8,
+	BUTTON_9,
+	BUTTON_10,
+	BUTTON_11,
+	BUTTON_12,
+	BUTTON_13,
+	BUTTON_14,
+	BUTTON_15,
+	BUTTON_16,
+};
