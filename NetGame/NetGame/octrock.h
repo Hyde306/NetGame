@@ -17,5 +17,6 @@ public:
 	//対象スポナー
 	CSpawnPoint* spawn{ nullptr };
 
+	int attackTimer = 0;
 	//CMap* map = nullptr;
 };

@@ -5,6 +5,7 @@
 #include "spawnPoint.h"
 #include "expitem.h"
 #include <cmath>
+#include "player.h"
 
 COctrock::COctrock(Point p, CMap* _map, CSpawnPoint* _sp)
 {
@@ -118,6 +119,49 @@ int COctrock::Action(const ObjList& base, ObjList& add_base)
             pos.y = nextPos.y;
     }
 
+    // 攻撃タイマー
+    if (attackTimer > 0)
+        attackTimer--;
+
+    // 攻撃範囲
+    const float attackRange = 40.0f;
+
+    // プレイヤーが近くにいる場合に攻撃
+    if (dist <= attackRange && attackTimer <= 0)
+    {
+        for (const auto& obj : base)
+        {
+            if (obj->ID == (int)ObjID::PLAYER)
+            {
+                CPlayer* player = dynamic_cast<CPlayer*>(obj.get());
+
+                if (player != nullptr)
+                {
+                    // ノックバック方向
+                    Vector knock;
+
+                    if (dist > 0.001f)
+                    {
+                        knock.x = dx / dist * 5.0f;
+                        knock.y = dy / dist * 5.0f;
+                    }
+                    else
+                    {
+                        knock.x = 5.0f;
+                        knock.y = 0.0f;
+                    }
+
+                    // プレイヤーに1ダメージ
+                    player->Damage(1, knock);
+                }
+
+                break;
+            }
+        }
+
+        // 攻撃クールタイム
+        attackTimer = 60;
+    }
     return 0;
 }
 void COctrock::Draw()

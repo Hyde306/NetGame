@@ -25,6 +25,18 @@ CPlayer::CPlayer(CMap* _map)
 
 int CPlayer::Action(const ObjList& base, ObjList& add_base)
 {
+	// HP‚ª0‚É‚È‚Á‚½‚çÁ–Å
+	if (hp <= 0)
+	{
+		hp = 0;
+		FLAG = false;
+		return 0;
+	}
+
+	// –³“GŠÔ‚ğŒ¸‚ç‚·
+	if (damageCoolTime > 0)
+		damageCoolTime--;
+
 	//UŒ‚’†‚Í‘€ì‚ğó‚¯•t‚¯‚È‚¢
 	if (att_frame > 0) {
 		att_frame--;
