@@ -22,5 +22,9 @@ public:
 
 	//åoå±íl
 	int exp{ 0 };
+	int level{ 1 };
+	int nextExp{ 5 };
+
+	void LevelUp();
 
 };

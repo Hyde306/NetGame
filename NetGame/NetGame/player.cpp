@@ -107,6 +107,28 @@ int CPlayer::Action(const ObjList& base, ObjList& add_base)
 	return 0;
 }
 
+// レベルアップ処理
+void CPlayer::LevelUp()
+{
+	while (exp >= nextExp)
+	{
+		// 必要経験値を消費
+		exp -= nextExp;
+
+		// レベルアップ
+		level++;
+
+		// 次の必要経験値を増やす
+		nextExp += 5;
+
+		// 最大HPを2増やす
+		maxhp += 2;
+
+		// HP全回復
+		hp = maxhp;
+	}
+}
+
 void CPlayer::DrawHPBar()
 {
 	int barX = 20;
@@ -115,54 +137,70 @@ void CPlayer::DrawHPBar()
 	int barWidth = 200;
 	int barHeight = 20;
 
-	// HP割合
-	float rate = 0.0f;
+	// HPバー
+	float hpRate = 0.0f;
 
 	if (maxhp > 0)
-		rate = (float)hp / maxhp;
+		hpRate = (float)hp / maxhp;
 
-	// 範囲制限
-	if (rate < 0.0f) rate = 0.0f;
-	if (rate > 1.0f) rate = 1.0f;
+	if (hpRate < 0.0f) hpRate = 0.0f;
+	if (hpRate > 1.0f) hpRate = 1.0f;
 
-	// 背景
-	DrawBox(
-		barX, barY,
+	// HP背景
+	DrawBox(barX, barY,
 		barX + barWidth, barY + barHeight,
-		GetColor(0, 0, 0), TRUE
-	);
+		GetColor(0, 0, 0), TRUE);
 
-	// HPの色
-	int color;
-
-	if (rate > 0.5f)
-		color = GetColor(0, 255, 0);
-	else if (rate > 0.25f)
-		color = GetColor(255, 255, 0);
-	else
-		color = GetColor(255, 0, 0);
-
-	// HPバー
-	DrawBox(
-		barX, barY,
-		barX + (int)(barWidth * rate),
+	// HPゲージ
+	DrawBox(barX, barY,
+		barX + (int)(barWidth * hpRate),
 		barY + barHeight,
-		color, TRUE
-	);
+		GetColor(0, 220, 0), TRUE);
 
-	// 枠線
-	DrawBox(
-		barX, barY,
-		barX + barWidth,
-		barY + barHeight,
-		GetColor(255, 255, 255), FALSE
-	);
+	// HP枠
+	DrawBox(barX, barY,
+		barX + barWidth, barY + barHeight,
+		GetColor(255, 255, 255), FALSE);
 
-	// HP数値
 	DrawFormatString(
-		barX, barY + 25,
+		barX, barY + 2,
 		GetColor(255, 255, 255),
-		"HP: %d / %d", hp, maxhp
+		"HP %d / %d", hp, maxhp
+	);
+
+	// EXPバー
+	float expRate = 0.0f;
+
+	if (nextExp > 0)
+		expRate = (float)exp / nextExp;
+
+	if (expRate < 0.0f) expRate = 0.0f;
+	if (expRate > 1.0f) expRate = 1.0f;
+
+	int expY = 55;
+
+	// EXP背景
+	DrawBox(barX, expY,
+		barX + barWidth, expY + 14,
+		GetColor(0, 0, 0), TRUE);
+
+	// EXPゲージ
+	DrawBox(barX, expY,
+		barX + (int)(barWidth * expRate),
+		expY + 14,
+		GetColor(0, 150, 255), TRUE);
+
+	// EXP枠
+	DrawBox(barX, expY,
+		barX + barWidth, expY + 14,
+		GetColor(255, 255, 255), FALSE);
+
+	// レベルと経験値
+	DrawFormatString(
+		barX, expY + 18,
+		GetColor(255, 255, 255),
+		"LEVEL %d   EXP %d / %d",
+		level, exp, nextExp
 	);
 }
 

@@ -1,6 +1,7 @@
 #include "expitem.h"
 #include "function.h"
 #include "map.h"
+#include "player.h"
 
 CItemExp::CItemExp(Point p, CMap* _map)
 {
@@ -27,20 +28,53 @@ CItemExp::CItemExp(Point p, CMap* _map)
 
 int CItemExp::Action(const ObjList& base, ObjList& add_base)
 {
-    //座標更新
+    // 座標更新
     pos.x += vec.x;
     pos.y += vec.y;
 
-    //移動速度を徐々に減速
+    // 移動速度を徐々に減速
     vec.x *= 0.9f;
     vec.y *= 0.9f;
-    //一定速度以下になったら停止
+
+    // 一定速度以下になったら停止
     if (abs(vec.x) < 0.1f) vec.x = 0;
     if (abs(vec.y) < 0.1f) vec.y = 0;
 
+    // プレイヤーとの接触判定
+    for (const auto& obj : base)
+    {
+        if (obj->ID == (int)ObjID::PLAYER)
+        {
+            CPlayer* player =
+                dynamic_cast<CPlayer*>(obj.get());
+
+            if (player != nullptr)
+            {
+                float dx = player->pos.x - pos.x;
+                float dy = player->pos.y - pos.y;
+
+                float dist = sqrt(dx * dx + dy * dy);
+
+                // 取得範囲
+                if (dist <= 32.0f)
+                {
+                    // 経験値を加算
+                    player->exp += value;
+
+                    // レベルアップ判定
+                    player->LevelUp();
+
+                    // アイテム消滅
+                    FLAG = false;
+
+                    break;
+                }
+            }
+        }
+    }
+
     return 0;
 }
-
 void CItemExp::Draw()
 {
     Point draw_pos = CameraToScreen(pos, map->camera);
