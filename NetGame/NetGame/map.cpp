@@ -37,7 +37,7 @@ CMap::CMap() {
 
 	//マップデータ読み込み(後でメンバー関数化）
 	int stage = 1;
-	ifstream fp("image\\map.txt");
+	ifstream fp("image\\map_test2.txt");
 	string str;
 
 	if (!fp.fail()) {
@@ -68,9 +68,16 @@ void CMap::Map_Create(ObjList& base) {
 		for (int x = 0; x < MAP_CHIP_X; x++) {
 			//スポーンポイントオブジェクトの生成
 			if (map[y][x] == 30) {
-				//OCTROCKスポナー
-				Point p{ x * CHIP_SIZE_X,y * CHIP_SIZE_Y };
+				Point p{ x * CHIP_SIZE_X, y * CHIP_SIZE_Y };
+
+				// 通常敵
 				base.push_back(make_unique<CSpawnPoint>(p, 0, this));
+			}
+			else if (map[y][x] == 31) {
+				Point p{ x * CHIP_SIZE_X, y * CHIP_SIZE_Y };
+
+				// ボス敵
+				base.push_back(make_unique<CSpawnPoint>(p, 1, this));
 			}
 		}
 	}
@@ -135,7 +142,9 @@ bool CMap::CanMove(Point p, int width, int height) {
 //指定したマップチップが壁かどうかを判定
 bool CMap::IsWall(int chip)
 {
-	return (chip != 0 && chip != 9 && chip != 27 && chip != 28 && chip != 18 && chip!=30);
+	return (chip != 0 && chip != 9 && chip != 27 &&
+		chip != 28 && chip != 18 &&
+		chip != 30 && chip != 31);
 }
 
 //マップ描画
