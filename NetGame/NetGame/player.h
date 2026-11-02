@@ -15,6 +15,8 @@ public:
 
 	//CMap* map = nullptr;
 	
+	// HPバー描画
+	void DrawHPBar();
 	//攻撃中フレーム
 	int att_frame{ 0 };
 

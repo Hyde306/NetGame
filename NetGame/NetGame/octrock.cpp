@@ -3,6 +3,7 @@
 #include "function.h"
 #include "damageObj.h"
 #include "spawnPoint.h"
+#include "expitem.h"
 #include <cmath>
 
 COctrock::COctrock(Point p, CMap* _map, CSpawnPoint* _sp)
@@ -39,6 +40,11 @@ int COctrock::Action(const ObjList& base, ObjList& add_base)
     if (hp <= 0)
     {
         FLAG = false;
+
+        // 経験値アイテムを生成
+        add_base.push_back(
+            std::make_unique<CItemExp>(pos, map)
+        );
 
         if (spawn != nullptr)
             spawn->enemyAlive = false;

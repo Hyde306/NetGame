@@ -16,6 +16,9 @@ CPlayer::CPlayer(CMap* _map)
 	//マップ情報
 	map = _map;
 
+	// HP初期化
+	HP(10);
+
 	ID = (int)ObjID::PLAYER;
 	pri = 1;
 }
@@ -91,9 +94,73 @@ int CPlayer::Action(const ObjList& base, ObjList& add_base)
 	}
 	return 0;
 }
+
+void CPlayer::DrawHPBar()
+{
+	int barX = 20;
+	int barY = 20;
+
+	int barWidth = 200;
+	int barHeight = 20;
+
+	// HP割合
+	float rate = 0.0f;
+
+	if (maxhp > 0)
+		rate = (float)hp / maxhp;
+
+	// 範囲制限
+	if (rate < 0.0f) rate = 0.0f;
+	if (rate > 1.0f) rate = 1.0f;
+
+	// 背景
+	DrawBox(
+		barX, barY,
+		barX + barWidth, barY + barHeight,
+		GetColor(0, 0, 0), TRUE
+	);
+
+	// HPの色
+	int color;
+
+	if (rate > 0.5f)
+		color = GetColor(0, 255, 0);
+	else if (rate > 0.25f)
+		color = GetColor(255, 255, 0);
+	else
+		color = GetColor(255, 0, 0);
+
+	// HPバー
+	DrawBox(
+		barX, barY,
+		barX + (int)(barWidth * rate),
+		barY + barHeight,
+		color, TRUE
+	);
+
+	// 枠線
+	DrawBox(
+		barX, barY,
+		barX + barWidth,
+		barY + barHeight,
+		GetColor(255, 255, 255), FALSE
+	);
+
+	// HP数値
+	DrawFormatString(
+		barX, barY + 25,
+		GetColor(255, 255, 255),
+		"HP: %d / %d", hp, maxhp
+	);
+}
+
 void CPlayer::Draw()
 {
 	Point draw_pos = CameraToScreen(pos, map->camera);
 
 	sprite.Draw(draw_pos.x, draw_pos.y);
+
+	// HPバー表示
+	DrawHPBar();
 }
+
