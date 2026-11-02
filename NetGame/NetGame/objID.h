@@ -6,6 +6,7 @@ enum class ObjID {
 	OCTROCK,
 	SWORD,
 	ITEM,
+	BOSSROCK,
 };
 
 //ƒAƒCƒeƒ€ID

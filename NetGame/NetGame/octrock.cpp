@@ -48,30 +48,54 @@ int COctrock::Action(const ObjList& base, ObjList& add_base)
 
     // ノックバック処理
     if (UpdateKnockBack())
-    {
-        // ノックバックによる移動にも壁判定を適用
-        // ※UpdateKnockBack() が先に座標を変更する方式の場合、
-        //   ここで元の位置を復元することはできない。
         return 0;
-    }
 
     // プレイヤーの座標を取得
     Point playerPos = Get_Point(base, (int)ObjID::PLAYER);
 
-    // プレイヤーへの方向を計算
+    // プレイヤーとの距離を計算
     float dx = static_cast<float>(playerPos.x - pos.x);
     float dy = static_cast<float>(playerPos.y - pos.y);
 
     float dist = std::sqrt(dx * dx + dy * dy);
 
-    if (dist > 0.001f)
+    // 探知範囲
+    const float detectionRange = 200.0f;
+
+    // 移動速度
+    const float followSpeed = 2.0f;
+    const float returnSpeed = 2.0f;
+
+    // 移動先を決定
+    Point targetPos;
+
+    if (dist <= detectionRange)
     {
-        // 敵の追従速度
-        const float followSpeed = 2.0f;
+        // プレイヤーが探知範囲内なら追いかける
+        targetPos = playerPos;
+    }
+    else
+    {
+        // 探知範囲外ならスポーン地点に戻る
+        if (spawn == nullptr)
+            return 0;
+
+        targetPos = spawn->pos;
+    }
+
+    // 移動方向を計算
+    float moveX = static_cast<float>(targetPos.x - pos.x);
+    float moveY = static_cast<float>(targetPos.y - pos.y);
+
+    float moveDist = std::sqrt(moveX * moveX + moveY * moveY);
+
+    if (moveDist > 1.0f)
+    {
+        float speed = (dist <= detectionRange) ? followSpeed : returnSpeed;
 
         // 移動ベクトルを正規化
-        float moveX = dx / dist * followSpeed;
-        float moveY = dy / dist * followSpeed;
+        moveX = moveX / moveDist * speed;
+        moveY = moveY / moveDist * speed;
 
         // X方向の壁判定
         Point nextPos = pos;
@@ -81,7 +105,6 @@ int COctrock::Action(const ObjList& base, ObjList& add_base)
             pos.x = nextPos.x;
 
         // Y方向の壁判定
-        // X方向の移動結果を反映して判定
         nextPos = pos;
         nextPos.y += static_cast<int>(std::round(moveY));
 
@@ -91,7 +114,6 @@ int COctrock::Action(const ObjList& base, ObjList& add_base)
 
     return 0;
 }
-
 void COctrock::Draw()
 {
     Point draw_pos = CameraToScreen(pos, map->camera);

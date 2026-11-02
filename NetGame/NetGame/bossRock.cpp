@@ -21,7 +21,7 @@ CBossRock::CBossRock(Point p, CMap* _map, CSpawnPoint* _sp)
     HP(20);
 
     spawn = _sp;
-    ID = (int)ObjID::OCTROCK;
+    ID = (int)ObjID::BOSSROCK;
     pri = 2;
 }
 
