@@ -6,6 +6,7 @@
 #include "map.h"
 #include "function.h"
 #include "spawnPoint.h"
+#include "itemKey.h"
 
 //文字分割関数
 vector<string> split(string& input, char delimiter)
@@ -66,18 +67,36 @@ CMap::CMap() {
 void CMap::Map_Create(ObjList& base) {
 	for (int y = 0; y < MAP_CHIP_Y; y++) {
 		for (int x = 0; x < MAP_CHIP_X; x++) {
-			//スポーンポイントオブジェクトの生成
+
+			// 通常敵スポーンポイント
 			if (map[y][x] == 30) {
 				Point p{ x * CHIP_SIZE_X, y * CHIP_SIZE_Y };
-
-				// 通常敵
-				base.push_back(make_unique<CSpawnPoint>(p, 0, this));
+				base.push_back(
+					make_unique<CSpawnPoint>(p, 0, this)
+				);
 			}
+
+			// ボス敵スポーンポイント
 			else if (map[y][x] == 31) {
 				Point p{ x * CHIP_SIZE_X, y * CHIP_SIZE_Y };
+				base.push_back(
+					make_unique<CSpawnPoint>(p, 1, this)
+				);
+			}
 
-				// ボス敵
-				base.push_back(make_unique<CSpawnPoint>(p, 1, this));
+			// 鍵アイテム
+			else if (map[y][x] == 32) {
+				Point p{
+					x * CHIP_SIZE_X + CHIP_SIZE_X / 2,
+					y * CHIP_SIZE_Y + CHIP_SIZE_Y / 2
+				};
+
+				base.push_back(
+					make_unique<CItemKey>(p, this)
+				);
+
+				// 鍵を生成した場所は床にする
+				map[y][x] = 0;
 			}
 		}
 	}
@@ -133,7 +152,18 @@ bool CMap::CanMove(Point p, int width, int height) {
 			y < 0 || y >= MAP_CHIP_Y)
 			return false;
 
-		if (IsWall(map[y][x])) return false;
+		// マップチップ取得
+		int chip = map[y][x];
+
+		// 鍵を持っていて扉に接触した場合
+		if (chip == 33 && keyObtained)
+		{
+			OpenDoor();
+			chip = map[y][x];
+		}
+
+		// 壁判定
+		if (IsWall(chip)) return false;
 	}
 
 	return true;
@@ -144,7 +174,25 @@ bool CMap::IsWall(int chip)
 {
 	return (chip != 0 && chip != 9 && chip != 27 &&
 		chip != 28 && chip != 18 &&
-		chip != 30 && chip != 31);
+		chip != 30 && chip != 31 &&
+		chip != 32 && chip != 34);
+}
+
+void CMap::OpenDoor()
+{
+	if (!keyObtained)
+		return;
+
+	for (int y = 0; y < MAP_CHIP_Y; y++)
+	{
+		for (int x = 0; x < MAP_CHIP_X; x++)
+		{
+			if (map[y][x] == 33)
+			{
+				map[y][x] = 34;
+			}
+		}
+	}
 }
 
 //マップ描画

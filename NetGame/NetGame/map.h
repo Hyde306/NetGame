@@ -31,6 +31,11 @@ public:
 	void Map_Create(ObjList&);//特殊ブロック生成
 	void Draw();
 
+	bool keyObtained = false;
+
+	// 鍵を取得したときに扉を開く
+	void OpenDoor();
+
 	//移動可能かチェック(位置情報, width, height)
 	bool CanMove(Point, int, int);
 	//指定したマップチップが壁かどうかを判定

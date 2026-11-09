@@ -11,6 +11,7 @@ public:
 	static int octrock_img;
 	static int item_img;
 	static int bossrock_img;
+	static int key_img;
 
 	//ƒŠƒ\[ƒX‚Ì“Ç‚İ‚İ
 	static void Load();

@@ -12,4 +12,5 @@ enum class ObjID {
 //ƒAƒCƒeƒ€ID
 enum class ItemNo {
 	EXP,
+	KEY
 };
