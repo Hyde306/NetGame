@@ -16,7 +16,7 @@ void Resource::Load()
 	player_img = LoadGraph("image\\player32.png");
 	octrock_img = LoadGraph("image\\octrock.png");
 	item_img = LoadGraph("image\\item.png");
-	bossrock_img = LoadGraph("image\\bossrock.png");
+	bossrock_img = LoadGraph("image\\enemy6.png");
 }
 
 //‰æ‘œíœ
