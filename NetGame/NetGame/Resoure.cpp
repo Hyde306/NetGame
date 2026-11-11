@@ -8,6 +8,8 @@ int Resource::octrock_img;
 int Resource::item_img;
 int Resource::bossrock_img;
 int Resource::key_img;
+int Resource::door_close_img;
+int Resource::door_open_img;
 
 //‰æ‘œ“Ç‚İ‚İ
 void Resource::Load()
@@ -19,6 +21,8 @@ void Resource::Load()
 	item_img = LoadGraph("image\\item.png");
 	bossrock_img = LoadGraph("image\\enemy6.png");
 	key_img = LoadGraph("image\\key.png");
+	door_close_img = LoadGraph("image\\close_door.png");
+	door_open_img = LoadGraph("image\\open_door.png");
 }
 
 //‰æ‘œíœ
@@ -30,5 +34,7 @@ void Resource::Release() {
 	DeleteGraph(item_img);
 	DeleteGraph(bossrock_img);
 	DeleteGraph(key_img);
+	DeleteGraph(door_close_img);
+	DeleteGraph(door_open_img);
 }
 

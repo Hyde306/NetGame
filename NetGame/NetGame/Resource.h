@@ -12,6 +12,8 @@ public:
 	static int item_img;
 	static int bossrock_img;
 	static int key_img;
+	static int door_close_img;
+	static int door_open_img;
 
 	//ƒŠƒ\[ƒX‚Ì“Ç‚İ‚İ
 	static void Load();

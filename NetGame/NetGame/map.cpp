@@ -196,26 +196,50 @@ void CMap::OpenDoor()
 }
 
 //マップ描画
-void CMap::Draw() {
-	//マップチップを描画
-	for (int y = 0; y < ChipNumY; y++) {
-		for (int x = 0; x < ChipNumX; x++) {
-			int mx = BaseChipNoX + x;
-			int my = BaseChipNoY + y;
+void CMap::Draw()
+{
+	for (int y = BaseChipNoY; y < BaseChipNoY + ChipNumY; y++)
+	{
+		for (int x = BaseChipNoX; x < BaseChipNoX + ChipNumX; x++)
+		{
+			int chip = map[y][x];
 
-			int chip = map[my][mx];
+			int drawX = x * CHIP_SIZE_X - camera.x;
+			int drawY = y * CHIP_SIZE_Y - camera.y;
 
-			DrawRectGraph(
-				(int)(mx * CHIP_SIZE_X - camera.x),
-				(int)(my * CHIP_SIZE_Y - camera.y),
-				(chip % 10) * CHIP_SIZE_X,
-				(chip / 10) * CHIP_SIZE_Y,
-				CHIP_SIZE_X,
-				CHIP_SIZE_Y,
-				img,
-				true,
-				false
-			);
+			// 閉じた扉
+			if (chip == 33)
+			{
+				DrawExtendGraph(
+					drawX, drawY,
+					drawX + CHIP_SIZE_X,
+					drawY + CHIP_SIZE_Y,
+					Resource::door_close_img,
+					TRUE
+				);
+			}
+			// 開いた扉
+			else if (chip == 34)
+			{
+				DrawExtendGraph(
+					drawX, drawY,
+					drawX + CHIP_SIZE_X,
+					drawY + CHIP_SIZE_Y,
+					Resource::door_open_img,
+					TRUE
+				);
+			}
+			else
+			{
+				// 通常のマップチップ
+				DrawRectGraph(
+					drawX, drawY,
+					(chip % 10) * CHIP_SIZE_X,
+					(chip / 10) * CHIP_SIZE_Y,
+					CHIP_SIZE_X, CHIP_SIZE_Y,
+					img, TRUE, FALSE
+				);
+			}
 		}
 	}
 }
