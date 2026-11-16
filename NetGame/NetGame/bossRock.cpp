@@ -7,20 +7,21 @@
 CBossRock::CBossRock(Point p, CMap* _map, CSpawnPoint* _sp)
 {
     sprite.img = Resource::bossrock_img;
-    sprite.cutX = 0;
-    sprite.cutY = 32;
 
-    // 通常敵の2倍の大きさ
+    sprite.cutX = 0;
+    sprite.cutY = 0;
+
+    // 画像は1コマ32×32
     sprite.width = ImgWidth = 32;
     sprite.height = ImgHeight = 32;
 
     map = _map;
     pos = p;
 
-    // HPを20に設定
     HP(20);
 
     spawn = _sp;
+
     ID = (int)ObjID::BOSSROCK;
     pri = 2;
 }
@@ -83,6 +84,28 @@ int CBossRock::Action(const ObjList& base, ObjList& add_base)
         attackTimer = attackCoolTime;
     }
 
+    // スプライト切り替え
+    sprite.cutX = animationFrame * 32;
+
+    switch (direction)
+    {
+    case 0: // 上向き
+        sprite.cutY = 0;
+        break;
+
+    case 1: // 下向き
+        sprite.cutY = 32;
+        break;
+
+    case 2: // 右向き
+        sprite.cutY = 64;
+        break;
+
+    case 3: // 左向き
+        // 右向き画像を使用
+        sprite.cutY = 64;
+        break;
+    }
     return 0;
 }
 
