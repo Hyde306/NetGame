@@ -25,7 +25,7 @@ CBossRock::CBossRock(Point p, CMap* _map, CSpawnPoint* _sp)
     spawn = _sp;
 
     ID = (int)ObjID::BOSSROCK;
-    pri = 2;
+    pri = 3;
 }
 
 int CBossRock::Action(const ObjList& base, ObjList& add_base)
