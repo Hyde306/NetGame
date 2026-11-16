@@ -6,13 +6,13 @@
 
 CBossRock::CBossRock(Point p, CMap* _map, CSpawnPoint* _sp)
 {
-    sprite.img = Resource::octrock_img;
+    sprite.img = Resource::bossrock_img;
     sprite.cutX = 0;
-    sprite.cutY = 0;
+    sprite.cutY = 32;
 
     // ’Êí“G‚Ì2”{‚Ì‘å‚«‚³
-    sprite.width = ImgWidth = 64;
-    sprite.height = ImgHeight = 64;
+    sprite.width = ImgWidth = 32;
+    sprite.height = ImgHeight = 32;
 
     map = _map;
     pos = p;

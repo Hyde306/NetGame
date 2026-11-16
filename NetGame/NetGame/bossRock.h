@@ -20,4 +20,11 @@ public:
 private:
     int attackTimer = 0;
     int attackCoolTime = 60;
+
+    // 向き
+    int direction{ 1 };
+
+    // アニメーション
+    int animationTimer{ 0 };
+    int animationFrame{ 0 };
 };
