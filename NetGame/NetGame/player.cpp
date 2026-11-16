@@ -10,7 +10,7 @@ CPlayer::CPlayer(CMap* _map)
 	sprite.width = ImgWidth = 32;
 	sprite.height = ImgHeight = 32;
 
-	pos.x = 129.5*64;
+	pos.x = 145*64;
 	pos.y = WINDOW_HEIGHT / 2 - 64;
 
 	//É}ÉbÉvèÓïÒ
