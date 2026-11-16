@@ -15,6 +15,8 @@ CBossRock::CBossRock(Point p, CMap* _map, CSpawnPoint* _sp)
     sprite.width = ImgWidth = 32;
     sprite.height = ImgHeight = 32;
 
+    sprite.scale = 2.0;
+
     map = _map;
     pos = p;
 
@@ -54,22 +56,28 @@ int CBossRock::Action(const ObjList& base, ObjList& add_base)
     const float followSpeed = 1.0f;
     const float attackRange = 48.0f;
 
+    // 移動量を初期化
+    vec.x = 0;
+    vec.y = 0;
+
     if (dist > attackRange && dist > 0.001f)
     {
-        float moveX = dx / dist * followSpeed;
-        float moveY = dy / dist * followSpeed;
+        vec.x = dx / dist * followSpeed;
+        vec.y = dy / dist * followSpeed;
 
+        // X方向の壁判定
         Point nextPos = pos;
-        nextPos.x += static_cast<int>(std::round(moveX));
+        nextPos.x += static_cast<int>(std::round(vec.x));
 
-        if (map->CanMove(nextPos, ImgWidth, ImgHeight))
-            pos.x = nextPos.x;
+        if (!map->CanMove(nextPos, ImgWidth, ImgHeight))
+            vec.x = 0;
 
+        // Y方向の壁判定
         nextPos = pos;
-        nextPos.y += static_cast<int>(std::round(moveY));
+        nextPos.y += static_cast<int>(std::round(vec.y));
 
-        if (map->CanMove(nextPos, ImgWidth, ImgHeight))
-            pos.y = nextPos.y;
+        if (!map->CanMove(nextPos, ImgWidth, ImgHeight))
+            vec.y = 0;
     }
 
     // 近距離で攻撃するためのタイマー
@@ -84,28 +92,32 @@ int CBossRock::Action(const ObjList& base, ObjList& add_base)
         attackTimer = attackCoolTime;
     }
 
-    // スプライト切り替え
-    sprite.cutX = animationFrame * 32;
 
-    switch (direction)
-    {
-    case 0: // 上向き
-        sprite.cutY = 0;
-        break;
+    //移動方向からキャラクターの向きを取得
+    Dir = GetDir(Dir);
 
-    case 1: // 下向き
+    //向きに応じて、切り取り位置を変更
+    if (Dir == (int)DIR::DOWN) {
+        //下向きの
         sprite.cutY = 32;
-        break;
-
-    case 2: // 右向き
-        sprite.cutY = 64;
-        break;
-
-    case 3: // 左向き
-        // 右向き画像を使用
-        sprite.cutY = 64;
-        break;
     }
+    else if (Dir == (int)DIR::UP) {
+        //上向き
+        sprite.cutY = 0;
+    }
+    else {
+        //左右方向
+        sprite.LR_reverse_flag = false;
+        //左の場合は、画像を反転させない。
+        if (Dir >= (int)DIR::LEFT_DOWN && Dir <= (int)DIR::LEFT_UP)
+            sprite.LR_reverse_flag = true;
+        //左右方向の画像
+        sprite.cutY = 64;
+    }
+
+    pos.x += vec.x;
+	pos.y += vec.y;
+    
     return 0;
 }
 
