@@ -14,7 +14,6 @@ int Resource::door_open_img;
 //‰æ‘œ“Ç‚İ‚İ
 void Resource::Load()
 {
-	//img = LoadGraph("");
 	map_img = LoadGraph("image\\map64.png");
 	player_img = LoadGraph("image\\player32.png");
 	octrock_img = LoadGraph("image\\octrock.png");

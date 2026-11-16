@@ -172,7 +172,7 @@ bool CMap::CanMove(Point p, int width, int height) {
 //指定したマップチップが壁かどうかを判定
 bool CMap::IsWall(int chip)
 {
-	return (chip != 0 && chip != 9 && chip != 27 &&
+	return (chip != 0 && chip != 1 && chip != 9 && chip != 27 &&
 		chip != 28 && chip != 18 &&
 		chip != 30 && chip != 31 &&
 		chip != 32 && chip != 34);
