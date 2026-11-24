@@ -4,6 +4,9 @@
 //ダメージ処理をするオブジェクトクラス
 class CDamageObj :public BaseVector{
 public:
+	//敵の管理用ID
+	int enemyID{ -1 };
+
 	//ノックバック移動ベクトル
 	Vector knockVec{ 0,0 };
 	//ノックバクフレーム

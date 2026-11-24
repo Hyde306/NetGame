@@ -28,6 +28,10 @@ constexpr auto WINDOW_HEIGHT = 768;	//ウィンドウ縦幅
 constexpr auto CHIP_SIZE_X = 64;
 constexpr auto CHIP_SIZE_Y = 64;
 
+constexpr auto MAX_PLAYER = 4;
+constexpr auto MAX_ENEMY = 256;
+constexpr auto MAX_ITEM = 128;
+
 //2D用
  struct Point {
 	float x, y;

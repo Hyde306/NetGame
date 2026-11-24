@@ -7,3 +7,21 @@ Point CameraToScreen(Point p, Point cp) {
 
 	return p;
 }
+
+//NetPlayerの存在チェック
+CNetPlayer* GetNetPlayer(const ObjList& base, int ID) {
+	for (auto& obj : base)
+	{
+		//NetPlayer以外はスキップ
+		if (obj->ID != (int)ObjID::CNetPlayer) continue;
+
+		//NetPlayerにキャスト
+		CNetPlayer* p = (CNetPlayer*)obj.get();
+
+		//指定したIDのNetPlayerを発見
+		if (p->netID == ID) return p;
+	}
+
+	//指定したIDのNetPlayerが存在しない
+	return nullptr;
+}

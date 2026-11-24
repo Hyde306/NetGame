@@ -2,14 +2,20 @@
 #include "player.h"
 
 void CItem::GetItem(BaseVector* b) {
-	//æ“¾‚µ‚½‚Ìˆ—
-	CPlayer* p = dynamic_cast<CPlayer*>(b);
+    CPlayer* p = dynamic_cast<CPlayer*>(b);
 
-	switch (itemNo) {
-	case ItemNo::EXP:
-			p->exp += value;
-			break;
-	}
+    if (p == nullptr) return;
 
-	FLAG = false;
+    switch (itemNo) {
+    case ItemNo::EXP:
+        return;
+
+    case ItemNo::KEY:
+        if (map != nullptr) {
+            map->keyObtained = true;
+        }
+        break;
+    }
+
+    FLAG = false;
 }

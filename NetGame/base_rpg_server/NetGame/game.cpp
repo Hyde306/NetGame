@@ -26,18 +26,20 @@ CGame::CGame(CManager* p) :CScene(p){
 
 //更新処理
 int CGame::UpDate(){
-	ObjList add_list;
+	ObjList add_list;//追加処理用オブジェクトリスト
 
-    //データ受信チェック
-    server.Receive();
+	//データ受信チェック
+	server.Receive();
 
-    //接続処理
-    if (server.Accept(40))
-    {
-        //新しい接続処理
-        server.New_Receive(add_list, server.NetHandle, map.get());
-    }
-//追加処理用オブジェクトリスト
+	//切断チェック
+	server.LostPlayer();
+
+	//接続処理
+	if (server.Accept(40))
+	{
+		//新しい接続処理
+		server.New_Receive(add_list, server.NetHandle, map.get());
+	}
 
 	//マップ更新
 	map->Map_Update(base,add_list);
@@ -57,6 +59,15 @@ int CGame::UpDate(){
 
 	//オブジェクトのソート処理(クイックソート)指定したインデックス間
 	ObjSort_Quick(base, 0, base.size() - 1);
+
+	timer++;
+	if (timer >= 3) {
+		server.SendAll(base);
+		timer = 0;
+	}
+
+	//切断したプレイヤーのスロット開放処理
+	server.ReleasePlayer();
 
 	return 0;
 }

@@ -10,11 +10,14 @@ CPlayer::CPlayer(CMap* _map)
 	sprite.width = ImgWidth = 32;
 	sprite.height = ImgHeight = 32;
 
-	pos.x = WINDOW_WIDTH / 2;
-	pos.y = WINDOW_HEIGHT / 2 - 32;
+	pos.x = 145*64;
+	pos.y = WINDOW_HEIGHT / 2 - 64;
 
 	//マップ情報
 	map = _map;
+
+	// HP初期化
+	HP(10);
 
 	ID = (int)ObjID::PLAYER;
 	pri = 1;
@@ -22,6 +25,18 @@ CPlayer::CPlayer(CMap* _map)
 
 int CPlayer::Action(const ObjList& base, ObjList& add_base)
 {
+	// HPが0になったら消滅
+	if (hp <= 0)
+	{
+		hp = 0;
+		FLAG = false;
+		return 0;
+	}
+
+	// 無敵時間を減らす
+	if (damageCoolTime > 0)
+		damageCoolTime--;
+
 	//攻撃中は操作を受け付けない
 	if (att_frame > 0) {
 		att_frame--;
@@ -69,6 +84,8 @@ int CPlayer::Action(const ObjList& base, ObjList& add_base)
 		add_base.push_back(make_unique<CSword>(pos, Dir, map));
 		//攻撃後の硬直フレームを設定
 		att_frame = 13;
+		//アタックカウンター加算
+		attackCount++;
 	}
 
 	if (isMove) {
@@ -91,9 +108,118 @@ int CPlayer::Action(const ObjList& base, ObjList& add_base)
 	}
 	return 0;
 }
+
+// レベルアップ処理
+void CPlayer::LevelUp()
+{
+	while (exp >= nextExp)
+	{
+		// 必要経験値を消費
+		exp -= nextExp;
+
+		// レベルアップ
+		level++;
+
+		// 次の必要経験値を増やす
+		nextExp += 5;
+
+		// 最大HPを2増やす
+		maxhp += 2;
+
+		// HP全回復
+		hp = maxhp;
+	}
+}
+
+void CPlayer::DrawHPBar()
+{
+	int barX = 20;
+	int barY = 20;
+
+	int barWidth = 200;
+	int barHeight = 20;
+
+	// HPバー
+	float hpRate = 0.0f;
+
+	if (maxhp > 0)
+		hpRate = (float)hp / maxhp;
+
+	if (hpRate < 0.0f) hpRate = 0.0f;
+	if (hpRate > 1.0f) hpRate = 1.0f;
+
+	// HP背景
+	DrawBox(barX, barY,
+		barX + barWidth, barY + barHeight,
+		GetColor(0, 0, 0), TRUE);
+
+	// HPゲージ
+	DrawBox(barX, barY,
+		barX + (int)(barWidth * hpRate),
+		barY + barHeight,
+		GetColor(0, 220, 0), TRUE);
+
+	// HP枠
+	DrawBox(barX, barY,
+		barX + barWidth, barY + barHeight,
+		GetColor(255, 255, 255), FALSE);
+
+	DrawFormatString(
+		barX, barY + 2,
+		GetColor(255, 255, 255),
+		"HP %d / %d", hp, maxhp
+	);
+
+	// EXPバー
+	float expRate = 0.0f;
+
+	if (nextExp > 0)
+		expRate = (float)exp / nextExp;
+
+	if (expRate < 0.0f) expRate = 0.0f;
+	if (expRate > 1.0f) expRate = 1.0f;
+
+	int expY = 55;
+
+	// EXP背景
+	DrawBox(barX, expY,
+		barX + barWidth, expY + 14,
+		GetColor(0, 0, 0), TRUE);
+
+	// EXPゲージ
+	DrawBox(barX, expY,
+		barX + (int)(barWidth * expRate),
+		expY + 14,
+		GetColor(0, 150, 255), TRUE);
+
+	// EXP枠
+	DrawBox(barX, expY,
+		barX + barWidth, expY + 14,
+		GetColor(255, 255, 255), FALSE);
+
+	// レベルと経験値
+	DrawFormatString(
+		barX, expY + 18,
+		GetColor(255, 255, 255),
+		"LEVEL %d   EXP %d / %d",
+		level, exp, nextExp
+	);
+}
+
 void CPlayer::Draw()
 {
 	Point draw_pos = CameraToScreen(pos, map->camera);
 
 	sprite.Draw(draw_pos.x, draw_pos.y);
+
+	DrawFormatString(
+		draw_pos.x - 32, draw_pos.y - 32,
+		0xffffff,
+		"%d",
+		exp
+	);
+
+	// HPバー表示
+	DrawHPBar();
 }
+

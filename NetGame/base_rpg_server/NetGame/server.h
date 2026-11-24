@@ -1,6 +1,7 @@
 //サーバークラス
 #pragma once
 #include "NetData.h"
+#include <set>
 
 //接続中のプレイヤー情報
 class CPlayerInfo
@@ -29,4 +30,26 @@ public:
 
     //クライアントからデータ受信
     void Receive();
+
+    //クライアントの切断チェック
+    void LostPlayer();
+
+    //切断したプレイヤーのスロット開放処理
+    void ReleasePlayer();
+
+    //サーバが管理している情報を接続中の全クライアントへ送信
+    void SendAll(const ObjList&);
+
+    //敵情報収集
+    void SetEnemyData(const ObjList&, CNetDataAll&);
+
+    //現在使用中の敵ID
+    std::set<int> aliveEnemy;
+
+    //管理用敵IDの発行
+    int GetNextEnemyID();
+
+    void SetItemData(const ObjList&, CNetDataAll&);
+    std::set<int> aliveItem;
+    int GetNextItemID();
 };

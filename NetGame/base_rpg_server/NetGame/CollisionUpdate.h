@@ -13,3 +13,6 @@ void Enemy_Sword_Collision(BaseVector*, BaseVector*);
 
 //プレイヤーとアイテム
 void Player_Item_Collision(BaseVector*, BaseVector*);
+
+//他プレイヤーとアイテム
+void NetPlayer_Item_Collision(BaseVector*, BaseVector*);

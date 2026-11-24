@@ -15,10 +15,18 @@ public:
 
 	//CMap* map = nullptr;
 	
+	// HPバー描画
+	void DrawHPBar();
 	//攻撃中フレーム
 	int att_frame{ 0 };
+	//攻撃カウント
+	int attackCount{ 0 };
 
 	//経験値
 	int exp{ 0 };
+	int level{ 1 };
+	int nextExp{ 5 };
+
+	void LevelUp();
 
 };

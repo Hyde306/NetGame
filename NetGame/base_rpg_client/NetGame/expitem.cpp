@@ -1,6 +1,7 @@
 #include "expitem.h"
 #include "function.h"
 #include "map.h"
+#include "player.h"
 
 CItemExp::CItemExp(Point p, CMap* _map)
 {
@@ -27,20 +28,8 @@ CItemExp::CItemExp(Point p, CMap* _map)
 
 int CItemExp::Action(const ObjList& base, ObjList& add_base)
 {
-    //座標更新
-    pos.x += vec.x;
-    pos.y += vec.y;
-
-    //移動速度を徐々に減速
-    vec.x *= 0.9f;
-    vec.y *= 0.9f;
-    //一定速度以下になったら停止
-    if (abs(vec.x) < 0.1f) vec.x = 0;
-    if (abs(vec.y) < 0.1f) vec.y = 0;
-
     return 0;
 }
-
 void CItemExp::Draw()
 {
     Point draw_pos = CameraToScreen(pos, map->camera);

@@ -1,6 +1,13 @@
 #pragma once
 #include "objBase.h"
 
+//敵情報専用クラス
+class CEnemyData {
+public:
+	//敵の管理用ID
+	int enemyID{ -1 };
+};
+
 //ダメージ処理をするオブジェクトクラス
 class CDamageObj :public BaseVector{
 public:

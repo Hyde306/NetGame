@@ -8,6 +8,9 @@
 #include "map.h"
 #include "client.h"
 
+class CDamageObj;
+class CItem;
+
 class CGame :public CScene
 {
 private:
@@ -15,6 +18,7 @@ public:
 	//クライアントクラス
 	CClient client;
 	int timer{ 0 };
+	int old_exp{ 0 };
 
 	//オブジェクト
 	ObjList base;
@@ -30,6 +34,9 @@ public:
 
 	int UpDate();//更新処理
 	void Draw();//描画処理
+
+	CDamageObj* FindEnemy(int);
+	CItem* FindItem(int);
 
 	//指定したオブジェクトを数える
 	int CountObj(int _id) {

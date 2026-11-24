@@ -98,6 +98,16 @@ void Player_Item_Collision(BaseVector* a, BaseVector* b) {
 	}
 }
 
+//他のプレイヤーとアイテム
+void NetPlayer_Item_Collision(BaseVector* a, BaseVector* b) {
+	if (HitCheck_Box2(a, b)) {
+		//アイテムオブジェクトにキャスト
+		CItem* item = dynamic_cast<CItem*>(b);
+		//アイテムゲット処理
+		item->GetItem(a);
+	}
+}
+
 void CollisionUpDate(ObjList& base) {
 	for (int i = 0; i < base.size(); i++) {
 		BaseVector* a = base[i].get();
@@ -120,6 +130,11 @@ void CollisionUpDate(ObjList& base) {
 			//プレイヤーとアイテム
 			if (a->ID == (int)ObjID::PLAYER && b->ID == (int)ObjID::ITEM) {
 				Player_Item_Collision(a, b);
+			}
+
+			//他プレイヤーとアイテム
+			if (a->ID == (int)ObjID::CNetPlayer && b->ID == (int)ObjID::ITEM) {
+				NetPlayer_Item_Collision(a, b);
 			}
 
 			//ID順を統一

@@ -13,4 +13,10 @@ public:
 
     //通信で受信したプレイヤーデータを参照
     PlayerData* data{ nullptr };
+
+    //アタックカウンター
+    int old_attackCount{ 0 };
+
+    //経験値
+    int exp{ 0 };
 };

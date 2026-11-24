@@ -32,8 +32,9 @@
     <ClInclude Include="main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="NetData.h"><Filter>ヘッダー ファイル</Filter></ClInclude>
     <ClInclude Include="client.h"><Filter>ヘッダー ファイル</Filter></ClInclude>
+    <ClInclude Include="net_player.h"><Filter>ヘッダー ファイル</Filter></ClInclude>
+    <ClInclude Include="NetData.h"><Filter>ヘッダー ファイル</Filter></ClInclude>
     <ClInclude Include="game.h">
       <Filter>ヘッダー ファイル\シーン</Filter>
     </ClInclude>
@@ -100,12 +101,19 @@
     <ClInclude Include="expitem.h">
       <Filter>ヘッダー ファイル\オブジェクト</Filter>
     </ClInclude>
+    <ClInclude Include="bossRock.h">
+      <Filter>ヘッダー ファイル\オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="itemKey.h">
+      <Filter>ヘッダー ファイル\オブジェクト</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="client.cpp"><Filter>ソース ファイル</Filter></ClCompile>
+    <ClCompile Include="net_player.cpp"><Filter>ソース ファイル</Filter></ClCompile>
     <ClCompile Include="ip_set.cpp"><Filter>ソース ファイル</Filter></ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>ソース ファイル\シーン</Filter>
@@ -153,6 +161,12 @@
       <Filter>ソース ファイル\オブジェクト</Filter>
     </ClCompile>
     <ClCompile Include="expitem.cpp">
+      <Filter>ソース ファイル\オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="bossRock.cpp">
+      <Filter>ソース ファイル\オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="itemKey.cpp">
       <Filter>ソース ファイル\オブジェクト</Filter>
     </ClCompile>
   </ItemGroup>

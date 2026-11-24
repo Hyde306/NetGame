@@ -14,6 +14,7 @@ private:
 public:
 	//サーバークラスの宣言
 	CServer server;
+	int timer{ 0 };
 
 	//オブジェクト
 	ObjList base;
